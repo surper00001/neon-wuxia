@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#071018" />
+    <meta name="description" content="玄刃：霓虹江湖。科技武侠第三人称 3D 动作游戏，钩索、枪械、刀剑与首领战。" />
+    <title>玄刃 · 霓虹江湖</title>
+  </head>
+  <body>
+    <div id="world"></div>
+    <div id="vignette"></div>
+    <div id="damage-flash"></div>
+    <div id="boot"><span class="boot-sigil">玄</span><p id="boot-text">正在构建悬空城…</p><i></i></div>
+    <main id="menu" class="screen hidden">
+      <div class="menu-top"><span class="brand"><b>玄</b> VOID FORGE</span><span class="build-tag">可玩原型 / CHAPTER 01</span></div>
+      <div class="menu-content">
+        <div class="eyebrow"><i></i> A CYBER WUXIA EXPERIENCE</div>
+        <h1><span>玄</span><span>刃</span></h1>
+        <div class="subtitle">霓 虹 江 湖 <em>NEON RONIN</em></div>
+        <p class="intro">天穹之下，旧道已死。<br>以钢为骨，以刃问天。</p>
+        <button id="start" class="primary"><span>踏入江湖</span><small>ENTER THE VOID</small><b>↗</b></button>
+        <div class="menu-options"><button id="open-controls">操作指南 <span>↗</span></button><button id="quality-menu">画质：高</button><button id="sound-menu">声音：开</button></div>
+      </div>
+      <div class="chapter"><span>01 / 雨夜天台</span><h2>青霄城 · 断月台</h2><p>钩索穿行 / 刀剑连招 / 近未来枪战</p></div>
+      <div class="menu-bottom"><span>原创 3D 科技武侠 · GAME STUDIO</span><span>建议键鼠游玩 <i>●</i> WEBGL 2</span></div>
+    </main>
+    <div id="hud" class="hidden">
+      <div class="hud-top">
+        <div class="objective"><span class="tiny-label">断月行动 / OPERATION MOONFALL</span><div><i></i><b id="objective-text">清除天台守卫</b></div><p id="wave-text">第一波 · 0 / 5</p></div>
+        <button id="pause-button" aria-label="暂停游戏">Ⅱ <span>ESC</span></button>
+      </div>
+      <div id="boss-hud" class="hidden"><span>天枢 · 执剑者 <small>THE WARDEN</small></span><div class="boss-track"><i id="boss-bar"></i></div></div>
+      <div id="reticle"><i></i><b></b><span></span></div>
+      <div id="hook-prompt" class="hidden"><kbd>F</kbd> 钩索锚点 <span id="hook-distance"></span></div>
+      <div id="lock-tag" class="hidden">目标锁定</div>
+      <div id="enemy-labels"></div>
+      <div id="toast" role="status"></div>
+      <div id="combo"><b id="combo-count">0</b><span>连击</span><small id="combo-rank">势如破竹</small></div>
+      <div class="hud-bottom">
+        <div class="vitals"><div class="player-name"><span>玄刃</span><small>浪客 / RONIN</small><b id="hp-number">100</b></div><div class="bar hp"><i id="hp-bar"></i></div><div class="bar energy"><i id="energy-bar"></i></div><div class="vitals-foot"><span>生命 / 内息</span><span id="score">000000</span></div></div>
+        <div class="weapon-strip"><button data-weapon="sword" class="selected"><kbd>1</kbd><svg viewBox="0 0 40 40"><path d="M29 5 12 25m-4-3 9 9M9 30l-4 5M29 5l-3 9"/></svg><span>流光剑</span></button><button data-weapon="blade"><kbd>2</kbd><svg viewBox="0 0 40 40"><path d="M30 5c-1 12-8 19-17 23l-3-4C19 21 25 13 30 5ZM8 25l7 8M10 30l-5 5"/></svg><span>断雨刀</span></button><button data-weapon="pistol"><kbd>3</kbd><svg viewBox="0 0 40 40"><path d="M7 13h27v8H21l-4 13H9l3-13H7zM24 14v6M14 23h5"/></svg><span>寂鸣枪</span></button><div id="ammo-wrap" class="hidden"><b id="ammo">12</b><span>/ ∞</span></div></div>
+      </div>
+      <div id="tutorial-hint"><span><kbd>WASD</kbd> 移动</span><span><kbd>鼠标</kbd> 视角 / 左键攻击</span><span><kbd>F</kbd> 钩索</span><span><kbd>SHIFT</kbd> 闪避</span><span><kbd>H</kbd> 全部操作</span></div>
+    </div>
+    <div id="pause" class="screen overlay hidden">
+      <div class="pause-card"><span class="eyebrow">THE WORLD CAN WAIT</span><h2>凝 神</h2><p>雨还在下，江湖等你回来。</p><button id="resume" class="primary">继续战斗 <b>↗</b></button><button id="restart" class="secondary">重新挑战</button><div class="setting-row"><button id="quality-pause">画质：高</button><button id="sound-pause">声音：开</button><button id="pause-controls">操作指南</button></div></div>
+    </div>
+    <div id="controls" class="screen overlay hidden">
+      <div class="controls-card"><span class="eyebrow">MASTER YOUR BLADE</span><h2>御刃之道</h2><div class="control-grid"><p><kbd>W A S D</kbd><span>移动 / 轻功疾行</span></p><p><kbd>鼠标移动</kbd><span>环绕视角</span></p><p><kbd>空格</kbd><span>跳跃 / 空中再按二段跳</span></p><p><kbd>SHIFT</kbd><span>瞬步闪避 · 无敌窗口</span></p><p><kbd>左键</kbd><span>刀剑三段连招 / 手枪射击</span></p><p><kbd>右键</kbd><span>刀剑格挡 / 手枪瞄准</span></p><p><kbd>Q</kbd><span>重击 · 消耗内息</span></p><p><kbd>E</kbd><span>按住格挡 · 精准格挡可反击</span></p><p><kbd>F</kbd><span>钩索飞跃 · 再按松开</span></p><p><kbd>1 / 2 / 3</kbd><span>剑 / 刀 / 手枪</span></p><p><kbd>R</kbd><span>手枪换弹 · 无限备用弹药</span></p><p><kbd>TAB</kbd><span>锁定 / 解除最近敌人</span></p><p><kbd>ESC / P</kbd><span>暂停 / 继续</span></p><p><kbd>H</kbd><span>查看本指南</span></p></div><p class="control-note">瞄准青色锚点按 F。橙色敌人预警出现后，闪避或精准格挡。击败三波守卫与天枢首领即可通关。</p><button id="close-controls" class="primary">已记于心 <b>↗</b></button></div>
+    </div>
+    <div id="result" class="screen overlay hidden">
+      <div class="result-card"><span id="result-eyebrow" class="eyebrow">MISSION COMPLETE</span><h2 id="result-title">一剑破天</h2><p id="result-desc">断月台已清。江湖，又多了一个传说。</p><div class="result-stats"><div><small>总得分</small><b id="final-score">0</b></div><div><small>最高连击</small><b id="final-combo">0</b></div><div><small>用时</small><b id="final-time">0:00</b></div></div><button id="again" class="primary">再入江湖 <b>↗</b></button><button id="back-menu" class="secondary">返回主界面</button></div>
+    </div>
+    <div id="mobile-warning" class="hidden">此原型需要键盘与鼠标。请在电脑浏览器中打开。</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
