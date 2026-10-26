@@ -1,4 +1,5 @@
 import './style.css';
+import './gallery.css';
 import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -6,6 +7,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { WorldView } from './render/world';
 import { CharacterView } from './render/character';
+import { CharacterGallery } from './render/gallery';
 import { Effects } from './render/effects';
 import { createMotor } from './physics/motor';
 import { Game } from './simulation/game';
@@ -32,6 +34,7 @@ async function boot() {
   const enemyViews=new Map<number,CharacterView>();
   const telegraphs=new Map<number,THREE.Mesh>();
   const fx=new Effects(scene),input=new Input(renderer.domElement),audio=new AudioEngine(),ui=new UI(game);
+  const gallery=new CharacterGallery();
   const composer=new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene,camera));
   const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.6,.45,1.1);composer.addPass(bloom);composer.addPass(new OutputPass());
@@ -60,6 +63,8 @@ async function boot() {
     }
   }
   ui.onStart=start;ui.onRestart=start;ui.onPause=pause;ui.onResume=resume;
+  el('open-gallery').onclick=()=>{el('gallery').classList.remove('hidden');gallery.open(el('gallery-stage'));};
+  el('close-gallery').onclick=()=>{gallery.close(el('gallery-stage'));el('gallery').classList.add('hidden');};
   ui.onControls=controls;
   ui.onMenu=()=>{game.mode='menu';input.unlock();clearEnemies();ui.menu();game.player.position.set(0,0,12);game.player.yaw=Math.PI;audio.pause(true);};
   ui.onQuality=()=>{
@@ -68,16 +73,20 @@ async function boot() {
   };
   ui.onSound=()=>{audio.setEnabled(!audio.enabled);ui.sound(audio.enabled);};
   input.onPause=()=>{
+    if(!el('gallery').classList.contains('hidden')){gallery.close(el('gallery-stage'));el('gallery').classList.add('hidden');return;}
     if(!el('controls').classList.contains('hidden')){controls(false);return;}
     if(game.mode==='playing')pause();else if(game.mode==='paused')resume();
   };
-  input.onHelp=()=>{if(game.mode==='playing'||game.mode==='paused'||game.mode==='menu')controls(el('controls').classList.contains('hidden'));};
+  input.onHelp=()=>{
+    if(!el('gallery').classList.contains('hidden'))return;
+    if(game.mode==='playing'||game.mode==='paused'||game.mode==='menu')controls(el('controls').classList.contains('hidden'));
+  };
   document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
   window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);});
   renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();contextLost=true;pause();ui.toast('图形连接中断，正在恢复…');});
   renderer.domElement.addEventListener('webglcontextrestored',()=>{contextLost=false;ui.toast('图形连接已恢复 · 点击继续战斗');});
   // Read-only diagnostics for playtests and future performance profiling.
-  Object.defineProperty(window,'__NEON_WUXIA__',{value:{state:()=>game.diagnostics(),renderer:()=>({calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries}),version:'0.1.0'},writable:false});
+  Object.defineProperty(window,'__NEON_WUXIA__',{value:{state:()=>game.diagnostics(),renderer:()=>({calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries}),version:'0.2.0'},writable:false});
   function renderEnemies(dt: number) {
     const ids=new Set<number>();
     for(const e of game.enemies) {
@@ -124,7 +133,7 @@ async function boot() {
   }
   function frame(now: number) {
     const dt=Math.min((now-frameTime)/1000||1/60,.05);frameTime=now;time+=dt;
-    if(contextLost)return;
+    if(contextLost||!el('gallery').classList.contains('hidden'))return;
     const playing=game.mode==='playing';
     updateCamera(dt);
     if(playing) {

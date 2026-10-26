@@ -20,7 +20,7 @@
         <div class="subtitle">霓 虹 江 湖 <em>NEON RONIN</em></div>
         <p class="intro">天穹之下，旧道已死。<br>以钢为骨，以刃问天。</p>
         <button id="start" class="primary"><span>踏入江湖</span><small>ENTER THE VOID</small><b>↗</b></button>
-        <div class="menu-options"><button id="open-controls">操作指南 <span>↗</span></button><button id="quality-menu">画质：高</button><button id="sound-menu">声音：开</button></div>
+        <div class="menu-options"><button id="open-gallery">角色鉴赏 <span>↗</span></button><button id="open-controls">操作指南</button><button id="quality-menu">画质：高</button><button id="sound-menu">声音：开</button></div>
       </div>
       <div class="chapter"><span>01 / 雨夜天台</span><h2>青霄城 · 断月台</h2><p>钩索穿行 / 刀剑连招 / 近未来枪战</p></div>
       <div class="menu-bottom"><span>原创 3D 科技武侠 · GAME STUDIO</span><span>建议键鼠游玩 <i>●</i> WEBGL 2</span></div>
@@ -51,6 +51,12 @@
     </div>
     <div id="result" class="screen overlay hidden">
       <div class="result-card"><span id="result-eyebrow" class="eyebrow">MISSION COMPLETE</span><h2 id="result-title">一剑破天</h2><p id="result-desc">断月台已清。江湖，又多了一个传说。</p><div class="result-stats"><div><small>总得分</small><b id="final-score">0</b></div><div><small>最高连击</small><b id="final-combo">0</b></div><div><small>用时</small><b id="final-time">0:00</b></div></div><button id="again" class="primary">再入江湖 <b>↗</b></button><button id="back-menu" class="secondary">返回主界面</button></div>
+    </div>
+    <div id="gallery" class="screen hidden">
+      <div id="gallery-stage"></div>
+      <div class="gallery-copy"><span class="eyebrow">CHARACTER / 玄刃</span><h2>青霄剑客</h2><p>墨衣藏锋，玉冠束发。<br>一身霜雪色，一剑照江湖。</p><div class="gallery-detail"><span>墨青交领 · 月白内衬</span><span>云纹金绣 · 玉石发冠</span><span>长发随风 · 轻甲护腕</span></div></div>
+      <button id="close-gallery" class="gallery-back">← 返回江湖</button>
+      <div class="gallery-hint">拖动旋转 · 滚轮缩放 · 点击画面后按 V 查看面部</div>
     </div>
     <div id="mobile-warning" class="hidden">此原型需要键盘与鼠标。请在电脑浏览器中打开。</div>
     <script type="module" src="/src/main.ts"></script>

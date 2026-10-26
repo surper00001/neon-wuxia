@@ -1,0 +1,12 @@
+#gallery{z-index:35;background:radial-gradient(ellipse at 60% 38%,#284449 0%,#101f29 44%,#070f18 100%);}
+#gallery-stage{position:absolute;left:29%;right:2%;top:3%;bottom:8%;outline:none;}
+#gallery-stage canvas{position:relative;cursor:grab;}
+#gallery-stage canvas:active{cursor:grabbing;}
+.gallery-copy{position:absolute;left:7%;top:28%;width:26%;pointer-events:none;}
+.gallery-copy h2{font-family:"Songti SC","STSong",serif;font-size:clamp(26px,3.3vw,48px);font-weight:400;letter-spacing:8px;margin:22px 0;}
+.gallery-copy p{font-family:"Songti SC",serif;font-size:14px;letter-spacing:3px;line-height:2.4;color:#a8bab9;}
+.gallery-detail{display:flex;flex-direction:column;gap:15px;border-left:1px solid #a2beae50;padding-left:18px;margin-top:35px;color:#a4b6ae;font-size:11px;letter-spacing:2px;}
+.gallery-back{position:absolute;left:7%;top:6%;font-size:12px;letter-spacing:3px;color:#c0d8ca;padding:10px 0;}
+.gallery-back:hover{color:#e3f8ee;}
+.gallery-hint{position:absolute;bottom:4%;width:100%;text-align:center;font-size:10px;letter-spacing:2px;color:#8fa9a4;pointer-events:none;}
+@media(max-width:800px){.gallery-copy{left:5%;top:16%;width:31%;}.gallery-copy h2{letter-spacing:3px;}.gallery-copy p{font-size:11px;letter-spacing:1px;}.gallery-detail{font-size:9px;letter-spacing:0;padding-left:10px;}.gallery-hint{font-size:8px;letter-spacing:1px;}}

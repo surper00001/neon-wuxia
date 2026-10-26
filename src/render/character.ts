@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import type { EnemyKind, Fighter, Player, Weapon } from '../types';
+import { buildHero, type HeroDetails } from './hero';
 
 export class CharacterView {
   root = new THREE.Group();
@@ -16,6 +17,8 @@ export class CharacterView {
   private restColor: THREE.Color;
   private isEnemy: boolean;
   private stride = 0;
+  private hero: HeroDetails | null = null;
+  private torsoHeight = 1.13;
   constructor(kind: 'player' | EnemyKind) {
     this.isEnemy=kind!=='player';
     const boss=kind==='boss';
@@ -26,6 +29,17 @@ export class CharacterView {
     const cloth=new THREE.MeshStandardMaterial({color:this.isEnemy?0x302d37:0x101c26,roughness:.84,side:THREE.DoubleSide});
     const gray=new THREE.MeshStandardMaterial({color:0x6c7d81,metalness:.75,roughness:.27});
     const leather=new THREE.MeshStandardMaterial({color:0x0d141d,roughness:.7});
+    if(!this.isEnemy) {
+      this.hero=buildHero({root:this.root,torso:this.torso,leftArm:this.leftArm,rightArm:this.rightArm,
+        leftLeg:this.leftLeg,rightLeg:this.rightLeg,metal:this.metal,glow:this.glow});
+      this.scarf=this.hero.scarf;this.robes=this.hero.robes;this.torsoHeight=this.hero.torsoHeight;
+      this.restColor=this.metal.color.clone();
+      this.buildWeapons(gray,leather);
+      this.setWeapon('sword');
+      // Enemy-only materials are not attached to this rig.
+      cloth.dispose();
+      return;
+    }
     const mask=new THREE.MeshStandardMaterial({color:this.isEnemy?0x626a73:0xc8d9cf,metalness:.4,roughness:.35});
     this.root.add(this.torso);
     this.torso.position.y=1.13;
@@ -124,7 +138,7 @@ export class CharacterView {
     this.leftArm.rotation.set(Math.sin(this.stride)*moving*.3,0,-.1);
     this.rightArm.rotation.set(-Math.sin(this.stride)*moving*.3,0,.1);
     this.torso.rotation.set(Math.sin(time*2)*.014,0,Math.sin(this.stride)*moving*.03);
-    this.torso.position.y=1.13+Math.abs(Math.sin(this.stride))*moving*.04;
+    this.torso.position.y=this.torsoHeight+Math.abs(Math.sin(this.stride))*moving*.04;
     if(player && !player.grounded) {
       this.leftLeg.rotation.x=-.55;this.rightLeg.rotation.x=.45;
       this.leftArm.rotation.z=-.5;this.rightArm.rotation.z=.5;
@@ -159,6 +173,13 @@ export class CharacterView {
     this.scarf.rotation.x=-.25-speed*.035+Math.sin(time*5)*.12;
     this.scarf.rotation.z=Math.sin(time*4)*.12;
     this.robes.forEach((r,i)=>{r.rotation.x=.2+speed*.045+Math.sin(time*5+i)*.07;});
+    if(this.hero) {
+      this.hero.hair.rotation.x=Math.sin(time*2.6)*.04+Math.min(speed,20)*.012;
+      this.hero.hair.rotation.z=Math.sin(time*2)*.045;
+      this.hero.ribbons.forEach((r,i)=>{r.rotation.x=Math.sin(time*3+i)*.1+speed*.015;r.rotation.z=Math.sin(time*2.4+i)*.07;});
+      this.scarf.rotation.x=-.05-speed*.015+Math.sin(time*3)*.06;
+      this.scarf.rotation.z=-.12+Math.sin(time*2)*.06;
+    }
     if(fighter&&fighter.hitFlash>0)this.metal.color.set(0xeecaaa);else this.metal.color.copy(this.restColor);
   }
   dispose() {
